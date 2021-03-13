@@ -1,16 +1,17 @@
-function [outputArg1] = send(inputArg1,inputArg2)
+function [qubits] = send(Xa,Ha)
 %UNTITLED6 Summary of this function goes here
 %   Detailed explanation goes here
-outputArg1(1,length(inputArg1)) = qubit;
-for n = 1:length(inputArg1)
-    if (inputArg1(1,n) == 0)
+qubits(1,length(Xa)) = qubit;
+for n = 1:length(Xa)
+    if (Xa(1,n) == 0)
     else
-        outputArg1(1,n).state = [0 1;1 0]*outputArg1(1,n).state;
+        qubits(1,n).state = [0 1;1 0]*qubits(1,n).state;
     end
-for i = 1:length(inputArg1)
-    if (inputArg2(1,i) == 0)
+end
+for n = 1:length(Xa)
+    if (Ha(1,n) == 0)
     else
-        outputArg1(1,i).state = 1/sqrt(2)*[1 1;1 -1]*outputArg1(1,i).state;
+        qubits(1,n).state = 1/sqrt(2)*[1 1;1 -1]*qubits(1,n).state;
     end
 end
 
