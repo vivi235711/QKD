@@ -1,18 +1,8 @@
-size = 5;
-Ha = random01(size);
-Xa = random01(size);
-Hb = random01(size);
-qubits = send(Xa,Ha);
-disp(Xa);
-disp(Ha);
-disp(Hb);
-% for n = 1:length(qubits)
-%     disp(qubits(1,n).state);
-% end
-% 
-[result, qubits] = measure(qubits, Hb);
-% 
-% for n = 1:length(qubits)
-%     disp(qubits(1,n).state);
-% end
-disp(result);
+size = 10000;
+
+rate = zeros(1,100);
+for n = 1:100
+    [Ha, Sa, Hb, Sb, Ce, He, Se, qubits] = BB84(size, n/100);
+    rate(1,n) = correctness(Sa,Sb,Ha,Hb,size);
+end
+plot(rate);
