@@ -1,4 +1,4 @@
-function [Ha, Sa, Hb, Sb, Ce, He, Se, qubits] = BB84(size, Erate)
+function [Ha, Sa, Hb, Sb, Ce, He, Se, qubits, rate] = BB84(size, Erate)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 Ha = random01(size, 0.5);
@@ -12,15 +12,9 @@ He = random01(size, 0.5);
 [Se, qubits]  = Eve_measure( qubits, Ce ,He );
 %receive
 [Sb, qubits] = measure( qubits, Hb );
-
+rate = correct_rate(Sa,Sb,Ha,Hb,size);
 end
 
-function output = random01(size, ratio)
-output = rand(1,size);
-for n = 1:size
-    output(1,n) = output(1,n) < ratio;       
-end
-end
 
 function qubits = send(Sa,Ha)
 %UNTITLED6 Summary of this function goes here
@@ -47,4 +41,18 @@ for n = 1:length(Ce)
         qubits(1,n).state = (1/sqrt(2)*[1 1;1 -1])^He(1,n)*[0 1;1 0]^Se(1,n)*[1;0]; 
     end
 end
+end
+
+function [rate1] = correct_rate(Sa,Sb,Ha,Hb,size)
+count1 = 0;
+count2 = 0;
+for n = 1:size
+    if(Ha(1,n) == Hb(1,n))
+        count1 = count1 + 1;
+        if(Sa(1,n) == Sb(1,n))
+            count2 = count2 + 1;
+        end        
+    end    
+end
+rate1 = count2/count1;
 end
