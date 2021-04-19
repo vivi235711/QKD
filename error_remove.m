@@ -1,4 +1,4 @@
-function [rate, lenth] = error_remove(size,error_rate, repeat)
+function [rate, lenth, keyAl, keyBl] = error_remove(size,error_rate, repeat)
 Sa = random01(size, 0.5);
 error_distribution = random01(size, error_rate);
 Sb = Sa;
@@ -8,14 +8,22 @@ end
 block_size = ceil(0.73/error_rate);
 rate = zeros(1, repeat+1);
 lenth = zeros(1, repeat+1);
+global reveal
+reveal = 0;
 rate(1,1) = correct_rate(Sa, Sb);
 lenth(1,1) = (length(Sa)/size);
+
 for n = 1:repeat    
     [Sa, Sb] = compare_and_remove(Sa, Sb, block_size);
     rate(1,n+1) = correct_rate(Sa, Sb);
     lenth(1,n+1) = (length(Sa)/size);
     [Sa, Sb] = shuffle(Sa, Sb);
 end
+revea = reveal/2;
+
+[keyA, keyB] = hash(Sa, Sb, revea, error_rate, 1);
+keyAl = length(keyA);
+keyBl = length(keyB);
 end
 
 function [Sa, Sb] = compare_and_remove(Sa, Sb, block_size)
@@ -51,6 +59,8 @@ for n = 1:length(s)
     c = c+s(1,n);
 end
 p = mod(c,2);    
+global reveal
+reveal = reveal+1;
 end
 
 function [rate] =  correct_rate(Sa, Sb)
@@ -72,4 +82,18 @@ for n = 1:length(r)
     Sa_new(1,n) = Sa(1,r(1,n));
     Sb_new(1,n) = Sb(1,r(1,n));
 end
+end
+
+function [keyA, keyB] =hash(Sa, Sb, reveal, error_rate, s)
+    r = length(Sa) - ceil(length(Sa)*error_rate) - reveal - s;
+    H = zeros(r, length(Sa));
+    for n = 1:r        
+            H(n,:) = random01(length(Sa), 0.5);
+    end
+    keyA = H * Sa';
+    keyB = H * Sb';
+    for n = 1:r        
+            keyA(n,1) = mod(keyA(n,1),2);
+            keyB(n,1) = mod(keyB(n,1),2);
+    end
 end
