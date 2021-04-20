@@ -1,0 +1,1 @@
+[rate, keyl] = error_correct(10000,0.05, 5);
