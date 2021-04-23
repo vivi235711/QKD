@@ -4,7 +4,7 @@ for n = 1:20
     error_rate(1,n) = error_rate(1,n)/100;
 end
 repeat = 4;
-time = 100;
+time = 10;
 
 rate1 = zeros(length(error_rate),repeat+1,time);
 rate2 = zeros(length(error_rate),repeat+1,time);

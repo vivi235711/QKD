@@ -40,6 +40,8 @@ for n = 1:length(parities_a)
     end
     
     if(parities_a(1,n) ~= parities_b(1,n))
+        global reveal 
+        reveal = reveal-2;
         if(n ~= length(parities_b))
             Sa((n-1)*block_size+1:n*block_size) = 2;
             Sb((n-1)*block_size+1:n*block_size) = 2;
