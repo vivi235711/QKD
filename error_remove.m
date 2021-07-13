@@ -1,4 +1,4 @@
-function [rate, lenth, keyl] = error_remove(size,error_rate, repeat)
+function [rate,  keyl] = error_remove(size,error_rate, repeat)
 Sa = random01(size, 0.5);
 error_distribution = random01(size, error_rate);
 Sb = Sa;

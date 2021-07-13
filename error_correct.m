@@ -14,7 +14,7 @@ for n = 1:repeat
     [Sa, Sb] = compare_and_correct(Sa, Sb, block_size, size);
     rate(1,n+1) = correct_rate(Sa, Sb, size);
     [Sa, Sb] = shuffle(Sa, Sb);
-    block_size = block_size*2;
+    %block_size = block_size*2;
 end
 revea = reveal/2;
 
@@ -24,20 +24,18 @@ keyl = hash(Sa, Sb, revea, error_rate, 1);
 end
 
 function [Sa, Sb] = compare_and_correct(Sa, Sb, block_size, size)
-parities_a = zeros(1,ceil(size/block_size));
-parities_b = zeros(1,ceil(size/block_size));
-for n = 1:length(parities_a)
-    if(n ~= length(parities_b))
-        parities_a(1,n) = parity(Sa((n-1)*block_size+1:n*block_size));
-        parities_b(1,n) = parity(Sb((n-1)*block_size+1:n*block_size));
+
+for n = 1:ceil(size/block_size)
+    if(n ~= ceil(size/block_size))
+        if(parity(Sa((n-1)*block_size+1:n*block_size)) ~= parity(Sb((n-1)*block_size+1:n*block_size)))
+            [Sa,Sb] = compare_block(Sa, Sb, n, block_size, size);
+        end
     else
-        parities_a(1,n) = parity(Sa([(n-1)*block_size+1,size]));
-        parities_b(1,n) = parity(Sb([(n-1)*block_size+1,size]));
+        if(parity(Sa([(n-1)*block_size+1,size])) ~= parity(Sb([(n-1)*block_size+1,size])))
+            [Sa,Sb] = compare_block(Sa, Sb, n, block_size, size);
+        end
     end
     
-    if(parities_a(1,n) ~= parities_b(1,n))
-        [Sa,Sb] = compare_block(Sa, Sb, n, block_size, size);        
-    end
     
 end
 

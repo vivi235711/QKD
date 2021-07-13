@@ -16,7 +16,7 @@ x = 1:repeat+1;
 for m = 1:length(error_rate)
     
     for n = 1:time   
-        [rate1(m,1:repeat+1,n), lenth1(m,1:repeat+1,n), keyl1(m,n)] = error_remove(size,error_rate(1,m), repeat);
+        [rate1(m,1:repeat+1,n), keyl1(m,n)] = error_remove(size,error_rate(1,m), repeat);
         [rate2(m,1:repeat+1,n), keyl2(m,n)] = error_correct(size,error_rate(1,m), repeat);
     end
 end
